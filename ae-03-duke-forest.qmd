@@ -28,9 +28,8 @@ Luckily, you can help them answer this question with data visualization!
 #| label: garage
 #| eval: false
 
-duke_forest <- duke_forest |>
+duke_forest |>
   mutate(garage = if_else(str_detect(parking, "Garage"), "Garage", "No garage"))
-
 ```
 
 -   Then, facet by `garage` and use different colors for the two facets.
@@ -40,11 +39,15 @@ duke_forest <- duke_forest |>
 
 ```{r}
 #| label: price-garage
+# New column garage
+duke_forest <- duke_forest |>
+  mutate(garage = if_else(str_detect(parking, "Garage"), "Garage", "No garage"))
+
 # Histograms of house prices, facet garage
 ggplot(duke_forest, aes(x = price, fill = garage)) +
   geom_histogram(binwidth = 50000) +
   labs(
-    title = "Distribution of House Prices by Garage Presence",
+    title = "Distribution of House Prices in Duke Forest by Garage Presence",
     x = "House Price",
     y = "Count"
     ) + 
@@ -75,11 +78,25 @@ Once again, data visualization skills to the rescue!
 
 ```{r}
 #| label: price-area
-
+# Scatterplot for area vs. price
+ggplot(duke_forest, aes(x = price, y = area, color = year_built)) +
+  geom_point() +
+  geom_smooth(se = FALSE, color = "grey", alpha = 0.5) +
+  labs(
+    title = "Duke Forest House Area vs. Price",
+    subtitle = "Organized by year built",
+    x = "Price",
+    y = "Area",
+    color = "Year Built"
+  )
 
 ```
 
-Add narrative here...
+Claim 1: Larger houses are priced higher. This claim is supported by the general trend in the data, where the line of best fit indicates a positive relationship. However, there are a couple of outliers from this trend near the upper-left corner of the plot where these homes are relatively large and priced relatively cheap that don't support this claim.
+
+Claim 2: Newer houses are priced higher. This claim is somewhat supported by the plot. The points located in the cluster are built in a variety of different years. However, it appears that all of the oldest homes (darkest points) are located in the bottom-left corner which supports the claim that newer houses are priced higher and thus older houses are priced lower.
+
+Claim 3: Bigger and more expensive houses tend to be newer ones than smaller and cheaper ones. This plot does not support this claim well, as there is very few data points that lie in the top-right corner of the graph to draw conclusions from. It appears that out of the few that are there they are not consistent in colour and therefore not consistent in their year built either.
 
 ::: callout-important
 Now is a good time to render, commit, and push. Make sure that you commit and push all changed documents and your Git pane is completely empty before proceeding.
